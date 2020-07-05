@@ -18,7 +18,13 @@ class BurgerBuilder extends Component {
             cheese: 0,
         },
         totalPrice: 4,
+        purchasable: false,
     }
+
+    isPurchasable = (ingredients) =>
+        Object.keys(ingredients)
+            .reduce(
+                (prev, actual) => prev + ingredients[actual], 0) > 0
 
     addIngredientHandler = (type) => {
         console.log('[BurgerBuilder.js] addIngredientHandler')
@@ -29,9 +35,12 @@ class BurgerBuilder extends Component {
 
             const newPrice = prevState.totalPrice + INGREDIENT_PRICES[type]
 
+            const purchasable = this.isPurchasable(ingredients)
+
             return {
                 ingredients,
                 totalPrice: newPrice,
+                purchasable,
             }
         })
 
@@ -48,9 +57,12 @@ class BurgerBuilder extends Component {
 
             const newPrice = prevState.totalPrice - INGREDIENT_PRICES[type]
 
+            const purchasable = this.isPurchasable(ingredients)
+
             return {
                 ingredients,
                 totalPrice: newPrice,
+                purchasable,
             }
         })
     }
@@ -66,6 +78,8 @@ class BurgerBuilder extends Component {
             <Fragment>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
+                    purchasable={this.state.purchasable}
+                    price={this.state.totalPrice}
                     disabled={disabledInfo}
                     ingredientAdded={this.addIngredientHandler}
                     ingredientRemoved={this.removeIngredientHandler}/>
