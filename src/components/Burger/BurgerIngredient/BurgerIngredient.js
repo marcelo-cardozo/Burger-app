@@ -29,6 +29,8 @@ const burgerIngredient = (props) => {
         case ('bacon'):
             ingredient = <div className={cssClasses.Bacon}/>
             break;
+        default:
+            break;
     }
 
     return ingredient;

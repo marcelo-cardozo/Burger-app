@@ -11,7 +11,6 @@ const controls = [
 ]
 
 const buildControls = (props) => {
-
     return (
         <div className={cssClasses.BuildControls}>
             {controls.map((value) =>
@@ -19,6 +18,7 @@ const buildControls = (props) => {
                               label={value.label}
                               added={props.ingredientAdded.bind(this, value.type)}
                               removed={props.ingredientRemoved.bind(this, value.type)}
+                              disableLess={props.disabled[value.type]}
                 />)
             }
         </div>

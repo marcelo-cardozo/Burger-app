@@ -57,10 +57,16 @@ class BurgerBuilder extends Component {
 
 
     render(){
+        const disabledInfo = Object.keys(this.state.ingredients)
+            .reduce((set,actual)=> {
+                set[actual] = this.state.ingredients[actual] === 0
+                return set
+            },{})
         return (
             <Fragment>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
+                    disabled={disabledInfo}
                     ingredientAdded={this.addIngredientHandler}
                     ingredientRemoved={this.removeIngredientHandler}/>
             </Fragment>
