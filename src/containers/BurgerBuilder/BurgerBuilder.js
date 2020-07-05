@@ -31,7 +31,7 @@ class BurgerBuilder extends Component {
 
     addIngredientHandler = (type) => {
         console.log('[BurgerBuilder.js] addIngredientHandler')
-        this.setState((prevState, props) =>{
+        this.setState((prevState, props) => {
 
             const ingredients = {...prevState.ingredients}
             ingredients[type]++
@@ -51,7 +51,7 @@ class BurgerBuilder extends Component {
     removeIngredientHandler = (type) => {
         console.log('[BurgerBuilder.js] removeIngredientHandler')
 
-        this.setState((prevState, props) =>{
+        this.setState((prevState, props) => {
             if (prevState.ingredients[type] === 0)
                 return prevState;
 
@@ -82,17 +82,24 @@ class BurgerBuilder extends Component {
         })
     }
 
-
-    render(){
+    continuePurchaseHandler = () => {
+        alert('continue')
+    }
+    render() {
         const disabledInfo = Object.keys(this.state.ingredients)
-            .reduce((set,actual)=> {
+            .reduce((set, actual) => {
                 set[actual] = this.state.ingredients[actual] === 0
                 return set
-            },{})
+            }, {})
         return (
             <Fragment>
                 <Modal show={this.state.purchasing} modalClosed={this.cancelPurchaseHandler}>
-                    <OrderSummary ingredients={this.state.ingredients} />
+                    <OrderSummary
+                        price={this.state.totalPrice}
+                        ingredients={this.state.ingredients}
+                        purchaseCancelled={this.cancelPurchaseHandler}
+                        purchaseContinued={this.continuePurchaseHandler}
+                    />
                 </Modal>
 
                 <Burger ingredients={this.state.ingredients}/>
