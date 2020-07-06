@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import cssClasses from './Modal.css';
 import Backdrop from "../Backdrop/Backdrop";
 
-const modal = (props) => {
+const Modal = (props) => {
     return (
         <Fragment>
             <Backdrop show={props.show} clicked={props.modalClosed}/>
@@ -18,4 +18,4 @@ const modal = (props) => {
     )
 }
 
-export default modal;
+export default React.memo(Modal, ((prevProps, nextProps) => prevProps.show === nextProps.show));
