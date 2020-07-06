@@ -1,13 +1,30 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import cssClasses from './Layout.css';
 import Toolbar from "../Navigation/Toolbar/Toolbar";
 import SideDrawer from "../Navigation/SideDrawer/SideDrawer";
 
-const layout = (props) => {
+const Layout = (props) => {
+    const [layoutState, setLayoutState] = useState({
+        showDrawer: false
+    })
+
+    const sideDrawerOpenHandler = () => {
+        setLayoutState({
+            showDrawer: true
+        })
+    }
+
+    const sideDrawerCloseHandler = () => {
+        setLayoutState({
+            showDrawer: false
+        })
+    }
+
     return (
         <Fragment>
-            <SideDrawer/>
-            <Toolbar/>
+            <SideDrawer show={layoutState.showDrawer} drawerClosed={sideDrawerCloseHandler}/>
+
+            <Toolbar drawerOpened={sideDrawerOpenHandler}/>
 
             <main className={cssClasses.Content}>
                 {props.children}
@@ -16,4 +33,4 @@ const layout = (props) => {
     );
 }
 
-export default layout;
+export default Layout;

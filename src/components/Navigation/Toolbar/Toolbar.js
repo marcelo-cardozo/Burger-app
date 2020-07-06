@@ -7,11 +7,11 @@ const toolbar = (props) => {
 
     return (
         <header className={cssClasses.Toolbar}>
-            <div>Menu</div>
+            <div onClick={props.drawerOpened}>Menu</div>
             <div className={cssClasses.Logo}>
                 <Logo/>
             </div>
-            <nav>
+            <nav className={cssClasses.DesktopOnly}>
                 <NavigationItems />
             </nav>
         </header>
