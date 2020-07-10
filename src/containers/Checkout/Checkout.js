@@ -3,18 +3,41 @@ import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSumm
 
 class Checkout extends Component {
     state = {
-        ingredients: {
-            salad: 1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
-        }
+        ingredients: null
+    }
+
+    componentDidMount() {
+        const query = new URLSearchParams(this.props.location.search)
+        const ingredients = Array.from(query.keys()).reduce((acc, key) => {
+            acc[key] = parseInt(query.get(key))
+            return acc
+        }, {})
+
+        this.setState({
+            ingredients
+        })
+    }
+
+    orderCancelled = () => {
+        this.props.history.goBack()
+    }
+
+    orderContinued = () => {
+        this.props.history.replace('/checkout/contact-data')
     }
 
     render() {
+        if (this.state.ingredients === null) {
+            return <h3>Burger has no summary</h3>
+        }
         return (
             <div>
-                <CheckoutSummary ingredients={this.state.ingredients}/>
+
+                <CheckoutSummary
+                    ingredients={this.state.ingredients}
+                    orderCancelled={this.orderCancelled}
+                    orderContinued={this.orderContinued}
+                />
             </div>
 
         );
