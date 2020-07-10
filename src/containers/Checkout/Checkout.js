@@ -1,20 +1,30 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
+import {Route} from "react-router";
+import ContactData from "./ContactData/ContactData";
+import Axios from "../../axios-orders";
 
 class Checkout extends Component {
     state = {
-        ingredients: null
+        ingredients: null,
+        totalPrice: null
     }
 
     componentDidMount() {
         const query = new URLSearchParams(this.props.location.search)
-        const ingredients = Array.from(query.keys()).reduce((acc, key) => {
-            acc[key] = parseInt(query.get(key))
-            return acc
-        }, {})
+        const ingredients = {}
+        let totalPrice = 0
+        Array.from(query.keys()).forEach(key => {
+            if (key === 'totalPrice') {
+                totalPrice = parseInt(query.get(key))
+            } else {
+                ingredients[key] = parseInt(query.get(key))
+            }
+        })
 
         this.setState({
-            ingredients
+            ingredients,
+            totalPrice
         })
     }
 
@@ -32,12 +42,20 @@ class Checkout extends Component {
         }
         return (
             <div>
+                <Fragment>
+                    <CheckoutSummary
+                        ingredients={this.state.ingredients}
+                        orderCancelled={this.orderCancelled}
+                        orderContinued={this.orderContinued}
+                    />
+                    <Route path={this.props.match.path + '/contact-data'}
+                           render={(props) => {
+                               return <ContactData ingredients={this.state.ingredients}
+                                                   totalPrice={this.state.totalPrice}
+                                                   {...props}/>
+                           }}/>
+                </Fragment>
 
-                <CheckoutSummary
-                    ingredients={this.state.ingredients}
-                    orderCancelled={this.orderCancelled}
-                    orderContinued={this.orderContinued}
-                />
             </div>
 
         );
