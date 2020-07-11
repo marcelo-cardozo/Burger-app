@@ -2,7 +2,6 @@ import React, {Component, Fragment} from "react";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import {Route} from "react-router";
 import ContactData from "./ContactData/ContactData";
-import Axios from "../../axios-orders";
 
 class Checkout extends Component {
     state = {
