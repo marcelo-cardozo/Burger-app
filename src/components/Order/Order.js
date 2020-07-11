@@ -16,7 +16,7 @@ const order = (props) => {
             margin: '0 8px',
             border: '1px solid #ccc',
             padding: '5px',
-        }}>{ingredient.name} ({ingredient.amount}) </span>
+        }} key={ingredient.name}>{ingredient.name} ({ingredient.amount}) </span>
     })
 
 
