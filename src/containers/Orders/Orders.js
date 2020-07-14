@@ -13,8 +13,7 @@ class Orders extends Component {
         this.setState({
             loading: true
         })
-        console.log('orderszzzz')
-        console.log(Axios)
+
         Axios.get('/orders.json')
             .then(response => {
                 const data = Object.keys(response.data).map(((value, index, array) => {
