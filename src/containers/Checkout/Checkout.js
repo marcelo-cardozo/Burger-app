@@ -1,11 +1,12 @@
 import React, {Component, Fragment} from "react";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
-import {Route} from "react-router";
+import {Redirect, Route} from "react-router";
 import ContactData from "./ContactData/ContactData";
 import {connect} from "react-redux";
+import * as actionCreators from "../../store/actions";
 
 class Checkout extends Component {
-    
+
     orderCancelled = () => {
         this.props.history.goBack()
     }
@@ -15,12 +16,13 @@ class Checkout extends Component {
     }
 
     render() {
-        if (this.props.ingredients === null) {
-            return <h3>Burger has no summary</h3>
-        }
-        return (
-            <div>
+        let summary = <Redirect to="/"/>
+        if (this.props.ingredients) {
+            const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
+
+            summary = (
                 <Fragment>
+                    {purchasedRedirect}
                     <CheckoutSummary
                         ingredients={this.props.ingredients}
                         orderCancelled={this.orderCancelled}
@@ -29,7 +31,11 @@ class Checkout extends Component {
                     <Route path={this.props.match.path + '/contact-data'}
                            component={ContactData}/>
                 </Fragment>
-
+            )
+        }
+        return (
+            <div>
+                {summary}
             </div>
 
         );
@@ -38,7 +44,8 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients,
+        ingredients: state.burger.ingredients,
+        purchased: state.order.purchased,
     }
 }
 
