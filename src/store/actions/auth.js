@@ -48,7 +48,7 @@ export const auth = (email, password, isSignUp) => {
     return dispatch => {
         dispatch(authStart())
 
-        const apiKey = ''
+        const apiKey = 'AIzaSyD2SvFeskQuYPokItkSIyq4CItvimGW1D4'
         let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`
         if (!isSignUp) {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
