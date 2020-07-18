@@ -5,6 +5,7 @@ import cssClasses from "./Auth.css";
 import {connect} from "react-redux";
 import * as actionCreators from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import {Redirect} from "react-router";
 
 class Auth extends Component {
     state = {
@@ -106,9 +107,23 @@ class Auth extends Component {
         })
     }
 
+    componentDidMount() {
+        if (!this.props.isBuildingBurger && this.props.authRedirectPath !== '/') {
+            this.props.onResetAuthRedirectPath()
+        }
+    }
+
     render() {
-        let form = <Spinner />
-        if(!this.props.loading){
+        if (this.props.isAuthenticated) {
+            let redirect = <Redirect to="/"/>
+            if (this.props.isBuildingBurger) {
+                redirect = <Redirect to={this.props.authRedirectPath}/>
+            }
+            return redirect
+        }
+
+        let form = <Spinner/>
+        if (!this.props.loading) {
 
             const formElementsArray = Object.keys(this.state.form).map(key => {
                 const inputData = this.state.form[key]
@@ -133,7 +148,8 @@ class Auth extends Component {
                         {formElementsArray}
                         <Button type="Success">{this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
                     </form>
-                    <Button type="Danger" clicked={this.switchSignMethod}>SWITCH TO {!this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
+                    <Button type="Danger" clicked={this.switchSignMethod}>SWITCH
+                        TO {!this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
                 </Fragment>
             )
         }
@@ -153,12 +169,16 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
+        isAuthenticated: state.auth.token !== null,
+        authRedirectPath: state.auth.authRedirectPath,
+        isBuildingBurger: state.burger.building,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onAuth: (email, password, isSignUp) => dispatch(actionCreators.auth(email, password, isSignUp)),
+        onResetAuthRedirectPath: (path) => dispatch(actionCreators.setAuthRedirectPath('/')),
     }
 
 }

@@ -27,10 +27,10 @@ const purchaseBurgerStart = () => {
 }
 
 export const purchaseBurger = (orderData) => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(purchaseBurgerStart())
 
-        Axios.post('/orders.json', orderData)
+        Axios.post(`/orders.json?auth=${getState().auth.token}`, orderData)
             .then(response => {
                 console.log('[continuePurchaseHandler] ', response)
 
@@ -77,10 +77,10 @@ const fetchOrdersStart = () => {
 }
 
 export const fetchOrders = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(fetchOrdersStart())
 
-        Axios.get('/orders.json')
+        Axios.get(`/orders.json?auth=${getState().auth.token}`)
             .then(response => {
                 console.log('[fetchOrders] ', response)
 
