@@ -7,12 +7,12 @@ export const authStart = () => {
     }
 }
 
-const authSuccess = (data) => {
+const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         payload: {
-            token: data.idToken,
-            userId: data.localId,
+            token: token,
+            userId: userId,
         }
     }
 }
@@ -35,6 +35,10 @@ const checkAuthTimeout = (timeout) => {
 }
 
 export const logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('expiration_date')
+
     return {
         type: actionTypes.AUTH_LOGOUT
     }
@@ -57,7 +61,14 @@ export const auth = (email, password, isSignUp) => {
         })
             .then((response) => {
                 console.log(response)
-                dispatch(authSuccess(response.data))
+                const expirationMillis = new Date().getTime() + response.data.expiresIn * 1000
+                const expirationDate = new Date(expirationMillis)
+
+                localStorage.setItem('token', response.data.idToken)
+                localStorage.setItem('userId', response.data.userId)
+                localStorage.setItem('expiration_date', expirationDate)
+
+                dispatch(authSuccess(response.data.idToken, response.data.localId))
 
                 dispatch(checkAuthTimeout(response.data.expiresIn))
             })
@@ -74,5 +85,23 @@ export const setAuthRedirectPath = (path) => {
         payload: {
             path
         }
+    }
+}
+
+export const authCheckState = () => {
+    return dispatch => {
+        const expDate = new Date(localStorage.getItem('expiration_date'))
+        if (expDate === null || expDate < new Date()){
+            dispatch(logout())
+        }else{
+            const token = localStorage.getItem('token')
+            const userId = localStorage.getItem('userId')
+
+            dispatch(authSuccess(token, userId))
+
+            const timeout = (expDate.getTime() - new Date().getTime())/1000
+            dispatch(checkAuthTimeout(timeout))
+        }
+
     }
 }
