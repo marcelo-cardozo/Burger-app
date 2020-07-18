@@ -65,7 +65,7 @@ export const auth = (email, password, isSignUp) => {
                 const expirationDate = new Date(expirationMillis)
 
                 localStorage.setItem('token', response.data.idToken)
-                localStorage.setItem('userId', response.data.userId)
+                localStorage.setItem('userId', response.data.localId)
                 localStorage.setItem('expiration_date', expirationDate)
 
                 dispatch(authSuccess(response.data.idToken, response.data.localId))
