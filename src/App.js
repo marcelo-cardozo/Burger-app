@@ -10,20 +10,20 @@ import Logout from "./containers/Auth/Logout/Logout";
 import * as actionCreators from "./store/actions";
 import {connect} from "react-redux";
 
-const App = (props) => {
+const App = ({isAuthenticated, onAuthCheckState}) => {
     useEffect(() => {
-        props.onAuthCheckState()
-    }, [])
+        onAuthCheckState()
+    }, [onAuthCheckState])
 
     let routes = (
         <Switch>
             <Route path="/auth" component={Auth}/>
             <Route path="/" exact component={BurgerBuilder}/>
-            <Redirect to="/" />
+            <Redirect to="/"/>
         </Switch>
     )
 
-    if(props.isAuthenticated) {
+    if (isAuthenticated) {
         routes = (
             <Switch>
                 <Route path="/checkout" component={Checkout}/>
@@ -31,7 +31,7 @@ const App = (props) => {
                 <Route path="/logout" component={Logout}/>
                 <Route path="/auth" component={Auth}/>
                 <Route path="/" exact component={BurgerBuilder}/>
-                <Redirect to="/" />
+                <Redirect to="/"/>
             </Switch>
         )
     }
