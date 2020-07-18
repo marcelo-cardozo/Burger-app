@@ -7,6 +7,7 @@ import Input from "../../../components/UI/Input/Input";
 import {connect} from "react-redux";
 import * as actionCreators from "../../../store/actions";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
+import {checkValidity, updateObject} from "../../../shared/utility";
 
 class ContactData extends Component {
     state = {
@@ -117,32 +118,17 @@ class ContactData extends Component {
         this.props.onOrderBurger(order)
     }
 
-    checkValidity = (value, rules) => {
-        let isValid = true
-        if (rules.required){
-            isValid = isValid && value.trim() !== ''
-        }
-
-        if (rules.minLength) {
-            isValid = isValid && value.trim().length >= rules.minLength
-        }
-
-        if (rules.maxLength) {
-            isValid = isValid && value.trim().length <= rules.maxLength
-        }
-
-        return isValid
-    }
-
     inputChangedHandler = (event, key) => {
         // change immutably the object key in the form
-        const updatedForm = {...this.state.orderForm}
-        updatedForm[key] = {
-            ...updatedForm[key],
+        const updatedFormElement = updateObject(this.state.orderForm[key],{
             value: event.target.value,
-            touched: true
-        }
-        updatedForm[key].valid = this.checkValidity(updatedForm[key].value, updatedForm[key].validation)
+            touched: true,
+            valid: checkValidity(event.target.value, this.state.orderForm[key].validation)
+        })
+
+        const updatedForm = updateObject(this.state.orderForm, {
+            [key]: updatedFormElement
+        })
 
         const formIsValid = Object.keys(updatedForm)
             .reduce((acc, value) => acc && updatedForm[value].valid, true);
