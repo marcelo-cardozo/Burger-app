@@ -12,7 +12,7 @@ import thunk from "redux-thunk";
 
 // NODE_ENV es definido (por defecto) en root->config->env.js
 // para que en production no se pueda acceder al redux state usando el redux devtool
-const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__  : null || compose;
 
 const store = createStore(combineReducers({
     burger: burgerBuilderReducer,
