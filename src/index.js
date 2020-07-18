@@ -6,13 +6,15 @@ import * as serviceWorker from './serviceWorker';
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import burgerBuilderReducer from "./store/reducer/burgerBuilder";
 import orderReducer from "./store/reducer/order";
+import authReducer from "./store/reducer/auth";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(combineReducers({
-    "burger": burgerBuilderReducer,
-    "order": orderReducer
+    burger: burgerBuilderReducer,
+    order: orderReducer,
+    auth: authReducer,
 }), composeEnhancers(
     applyMiddleware(thunk)
 ))
@@ -31,3 +33,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+

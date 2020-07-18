@@ -4,8 +4,7 @@ import Button from "../../components/UI/Button/Button";
 import cssClasses from "./Auth.css";
 import {connect} from "react-redux";
 import * as actionCreators from "../../store/actions/index";
-import Axios from "../../axios-orders";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Auth extends Component {
     state = {
@@ -108,38 +107,52 @@ class Auth extends Component {
     }
 
     render() {
-        const formElementsArray = Object.keys(this.state.form).map(key => {
-            const inputData = this.state.form[key]
-            return (
-                <Input
-                    key={key}
-                    elementType={inputData.elementType}
-                    elementConfig={inputData.elementConfig}
-                    value={inputData.value}
-                    invalid={!inputData.valid}
-                    shouldValidate={inputData.validation !== undefined}
-                    touched={inputData.touched}
-                    errorMessage={inputData.errorMessage}
-                    changed={(event) => this.inputChangedHandler(event, key)}/>
-            )
-        })
+        let form = <Spinner />
+        if(!this.props.loading){
 
-        let form = (
-            <Fragment>
-                <h4>Enter your credentials</h4>
-                <form onSubmit={this.onAuth}>
-                    {formElementsArray}
-                    <Button type="Success">{this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
-                </form>
-                <Button type="Danger" clicked={this.switchSignMethod}>SWITCH TO {!this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
-            </Fragment>
-        )
+            const formElementsArray = Object.keys(this.state.form).map(key => {
+                const inputData = this.state.form[key]
+                return (
+                    <Input
+                        key={key}
+                        elementType={inputData.elementType}
+                        elementConfig={inputData.elementConfig}
+                        value={inputData.value}
+                        invalid={!inputData.valid}
+                        shouldValidate={inputData.validation !== undefined}
+                        touched={inputData.touched}
+                        errorMessage={inputData.errorMessage}
+                        changed={(event) => this.inputChangedHandler(event, key)}/>
+                )
+            })
+
+            form = (
+                <Fragment>
+                    <h4>Enter your credentials</h4>
+                    <form onSubmit={this.onAuth}>
+                        {formElementsArray}
+                        <Button type="Success">{this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
+                    </form>
+                    <Button type="Danger" clicked={this.switchSignMethod}>SWITCH TO {!this.state.isSignUp ? 'SIGN UP' : 'SIGN IN'}</Button>
+                </Fragment>
+            )
+        }
+
+        const errorMessage = this.props.error ? <p>{this.props.error}</p> : null
 
         return (
             <div className={cssClasses.Auth}>
+                {errorMessage}
                 {form}
             </div>
         );
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        loading: state.auth.loading,
+        error: state.auth.error,
     }
 }
 
@@ -150,4 +163,4 @@ const mapDispatchToProps = dispatch => {
 
 }
 
-export default connect(null, mapDispatchToProps)(withErrorHandler(Auth, Axios))
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)
