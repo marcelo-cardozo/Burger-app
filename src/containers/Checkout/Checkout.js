@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from "react";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
-import {Redirect, Route} from "react-router";
+import {Redirect, Route, withRouter} from "react-router";
 import ContactData from "./ContactData/ContactData";
 import {connect} from "react-redux";
 
@@ -48,4 +48,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Checkout)
+export default withRouter(connect(mapStateToProps)(Checkout))
