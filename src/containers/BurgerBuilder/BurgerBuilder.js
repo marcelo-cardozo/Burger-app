@@ -11,7 +11,7 @@ import * as actionCreators from "../../store/actions";
 
 
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
     state = {
         purchasing: false,
     }
@@ -52,7 +52,7 @@ class BurgerBuilder extends Component {
         let burger = null
         let orderSummary = null
 
-        if (this.props.ingredients !== null) {
+        if (this.props.ingredients) {
 
             const disabledInfo = Object.keys(this.props.ingredients)
                 .reduce((set, actual) => {
