@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import * as actions from "../actions/";
 import {put} from "redux-saga/effects";
 
 // parameter is action that was dispatched
@@ -13,8 +14,6 @@ export function* logoutSaga(action) {
     yield localStorage.removeItem('expiration_date')
 
     // it will dispatch the action
-    yield put({
-        type: actionTypes.AUTH_LOGOUT
-    })
+    yield put(actions.didLogout())
 }
 
