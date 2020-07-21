@@ -1,6 +1,6 @@
 import * as actionTypes from "../actions/actionTypes";
 import * as actions from "../actions/";
-import {put} from "redux-saga/effects";
+import {put, delay} from "redux-saga/effects";
 
 // parameter is action that was dispatched
 // add "*" to function, it converts it to a generator, which are functions that can be called incrementally
@@ -17,3 +17,7 @@ export function* logoutSaga(action) {
     yield put(actions.didLogout())
 }
 
+export function* checkAuthTimeoutSaga(action) {
+    yield delay(action.payload.expirationTime * 1000)
+    yield put(actions.logout())
+}

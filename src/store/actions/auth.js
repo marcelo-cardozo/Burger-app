@@ -27,10 +27,11 @@ const authFail = (error) => {
 }
 
 const checkAuthTimeout = (timeout) => {
-    return dispatch => {
-        setTimeout(() => {
-            dispatch(logout())
-        }, timeout * 1000)
+    return {
+        type: actionTypes.AUTH_CHECK_TIMEOUT,
+        payload: {
+            expirationTime: timeout
+        }
     }
 }
 
