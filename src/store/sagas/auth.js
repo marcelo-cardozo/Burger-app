@@ -1,5 +1,5 @@
 import * as actions from "../actions/";
-import {put, delay} from "redux-saga/effects";
+import {put, delay, call} from "redux-saga/effects";
 import Axios from "axios";
 
 // parameter is action that was dispatched
@@ -10,8 +10,8 @@ export function* logoutSaga(action) {
     // each statement should be prepend with "yield" to wait and continue to the next statement
     // so, if it were an async action, it would wait until the step is done
     yield localStorage.removeItem('token')
-    yield localStorage.removeItem('userId')
-    yield localStorage.removeItem('expiration_date')
+    yield call(localStorage.removeItem, 'userId')
+    yield call(localStorage.removeItem, 'expiration_date')
 
     // it will dispatch the action
     yield put(actions.didLogout())
