@@ -1,4 +1,3 @@
-import * as actionTypes from "../actions/actionTypes";
 import * as actions from "../actions/";
 import {put, delay} from "redux-saga/effects";
 import Axios from "axios";
@@ -52,5 +51,21 @@ export function* authSaga(action) {
     } catch (error) {
         console.log(error.response)
         yield put(actions.authFail(error.response.data.error))
+    }
+}
+
+export function* authCheckStateSaga(action) {
+    const expDateStorage = yield localStorage.getItem('expiration_date')
+    const expDate = new Date(expDateStorage)
+    if (expDateStorage === null || expDate < new Date()) {
+        yield put(actions.logout())
+    } else {
+        const token = yield localStorage.getItem('token')
+        const userId = yield localStorage.getItem('userId')
+
+        yield put(actions.authSuccess(token, userId))
+
+        const timeout = (expDate.getTime() - new Date().getTime()) / 1000
+        yield put(actions.checkAuthTimeout(timeout))
     }
 }
