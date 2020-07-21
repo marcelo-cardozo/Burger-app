@@ -1,5 +1,4 @@
 import * as actionTypes from "./actionTypes";
-import Axios from "../../axios-orders";
 
 export const purchaseBurgerSuccess = (orderId, orderData) => {
     return {
@@ -42,7 +41,7 @@ export const purchaseInit = () => {
     }
 }
 
-const fetchOrdersSuccess = (orders) => {
+export const fetchOrdersSuccess = (orders) => {
     return {
         type: actionTypes.FETCH_ORDERS_SUCCESS,
         payload: {
@@ -51,7 +50,7 @@ const fetchOrdersSuccess = (orders) => {
     }
 }
 
-const fetchOrdersFail = (error) => {
+export const fetchOrdersFail = (error) => {
     return {
         type: actionTypes.FETCH_ORDERS_FAIL,
         payload: {
@@ -60,32 +59,17 @@ const fetchOrdersFail = (error) => {
     }
 }
 
-const fetchOrdersStart = () => {
+export const fetchOrdersStart = () => {
     return {
         type: actionTypes.FETCH_ORDERS_START
     }
 }
 
-export const fetchOrders = () => {
-    return (dispatch, getState) => {
-        dispatch(fetchOrdersStart())
-        const queryParams = `?auth=${getState().auth.token}&orderBy="userId"&equalTo="${getState().auth.userId}"`
-        Axios.get(`/orders.json${queryParams}`)
-            .then(response => {
-                console.log('[fetchOrders] ', response)
-
-                const orders = Object.keys(response.data).map(((value) => {
-                    return {
-                        id: value,
-                        ...response.data[value]
-                    }
-                }))
-                dispatch(fetchOrdersSuccess(orders))
-            })
-            .catch(error => {
-                console.log('[fetchOrders] ', error)
-
-                dispatch(fetchOrdersFail(error))
-            })
+export const fetchOrders = (token, userId) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_INIT,
+        payload:{
+            token,userId
+        }
     }
 }
