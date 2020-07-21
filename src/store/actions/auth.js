@@ -7,7 +7,7 @@ export const authStart = () => {
     }
 }
 
-const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         payload: {
@@ -17,7 +17,7 @@ const authSuccess = (token, userId) => {
     }
 }
 
-const authFail = (error) => {
+export const authFail = (error) => {
     return {
         type: actionTypes.AUTH_FAIL,
         payload: {
@@ -26,7 +26,7 @@ const authFail = (error) => {
     }
 }
 
-const checkAuthTimeout = (timeout) => {
+export const checkAuthTimeout = (timeout) => {
     return {
         type: actionTypes.AUTH_CHECK_TIMEOUT,
         payload: {
@@ -48,37 +48,11 @@ export const didLogout = () => {
 }
 
 export const auth = (email, password, isSignUp) => {
-    return dispatch => {
-        dispatch(authStart())
-
-        const apiKey = ''
-        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`
-        if (!isSignUp) {
-            url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
+    return {
+        type: actionTypes.AUTH_USER,
+        payload: {
+            email, password, isSignUp
         }
-
-        Axios.post(url, {
-            email,
-            password,
-            returnSecureToken: true
-        })
-            .then((response) => {
-                console.log(response)
-                const expirationMillis = new Date().getTime() + response.data.expiresIn * 1000
-                const expirationDate = new Date(expirationMillis)
-
-                localStorage.setItem('token', response.data.idToken)
-                localStorage.setItem('userId', response.data.localId)
-                localStorage.setItem('expiration_date', expirationDate)
-
-                dispatch(authSuccess(response.data.idToken, response.data.localId))
-
-                dispatch(checkAuthTimeout(response.data.expiresIn))
-            })
-            .catch(error => {
-                console.log(error.response)
-                dispatch(authFail(error.response.data.error))
-            })
     }
 }
 
