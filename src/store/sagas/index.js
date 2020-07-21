@@ -3,6 +3,7 @@ import * as actionTypes from "../actions/actionTypes";
 
 
 import {logoutSaga, checkAuthTimeoutSaga, authSaga, authCheckStateSaga} from "./auth";
+import {initIngredientsSaga} from "./burgerBuilder"
 
 // to listen for the "initiate"s action and do something, create generator
 export function* watchAuth() {
@@ -11,4 +12,8 @@ export function* watchAuth() {
     yield takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga)
     yield takeEvery(actionTypes.AUTH_USER, authSaga)
     yield takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga)
+}
+
+export function* watchBurger() {
+    yield takeEvery(actionTypes.INIT_INGREDIENTS, initIngredientsSaga)
 }

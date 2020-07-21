@@ -19,7 +19,7 @@ export const removeIngredient = (type) => {
     }
 }
 
-const setIngredients = (ingredients) => {
+export const setIngredients = (ingredients) => {
     return {
         type: actionTypes.SET_INGREDIENTS,
         payload: {
@@ -28,20 +28,14 @@ const setIngredients = (ingredients) => {
     }
 }
 
-const fetchIngredientsFailed = () => {
+export const fetchIngredientsFailed = () => {
     return {
         type: actionTypes.FETCH_INGREDIENTS_FAILED,
     }
 }
 
 export const initIngredients = () => {
-    return dispatch => {
-        Axios.get('/ingredients.json')
-            .then(resp => {
-                dispatch(setIngredients(resp.data))
-            })
-            .catch(error => {
-                dispatch(fetchIngredientsFailed())
-            })
+    return {
+        type: actionTypes.INIT_INGREDIENTS
     }
 }

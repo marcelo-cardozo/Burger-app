@@ -10,7 +10,7 @@ import authReducer from "./store/reducer/auth";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
-import {watchAuth} from "./store/sagas";
+import {watchAuth, watchBurger} from "./store/sagas";
 
 // NODE_ENV es definido (por defecto) en root->config->env.js
 // para que en production no se pueda acceder al redux state usando el redux devtool
@@ -28,6 +28,7 @@ const store = createStore(combineReducers({
 ))
 
 sagaMiddleware.run(watchAuth)
+sagaMiddleware.run(watchBurger)
 
 ReactDOM.render(
     <Provider store={store}>
