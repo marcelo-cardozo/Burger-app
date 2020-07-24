@@ -17,7 +17,10 @@ const LazyOrders = React.lazy(() => {
 const LazyAuth = React.lazy(() => {
     return import("./containers/Auth/Auth")
 })
-const App = ({isAuthenticated, onAuthCheckState}) => {
+const App = (props) => {
+
+    const {isAuthenticated, onAuthCheckState} = props
+
     useEffect(() => {
         onAuthCheckState()
     }, [onAuthCheckState])
