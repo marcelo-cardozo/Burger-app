@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useState} from "react";
+import React, {Fragment, useState} from "react";
 import cssClasses from "./ContactData.css";
 import Button from "../../../components/UI/Button/Button";
 import Axios from "../../../axios-orders";
