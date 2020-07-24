@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 
-export default httpClient => {
+const useHttpErrorHandler = httpClient => {
     const [error, setError] = useState(null)
 
     const reqInt = httpClient.interceptors.request.use(res => {
@@ -32,3 +32,5 @@ export default httpClient => {
 
     return [error, clearError]
 }
+
+export default useHttpErrorHandler;
